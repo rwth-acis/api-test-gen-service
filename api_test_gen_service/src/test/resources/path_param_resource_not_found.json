@@ -1,0 +1,52 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Title",
+    "description": "Title",
+    "version": "1.0.0"
+  },
+  "host": "www",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/dishes/{id}/ratings": {
+      "get": {
+        "summary": "path_param_resource_not_found",
+        "description": " ",
+        "operationId": "getDishRatings",
+        "consumes": [
+          "string",
+          "application/json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "in": "path",
+            "description": ""
+          }
+        ],
+        "security": [
+          {
+            "defaultProvider": [
+              "openid",
+              "email",
+              "profile"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "404": {
+            "description": "not found"
+          }
+        }
+      }
+    }
+  }
+}

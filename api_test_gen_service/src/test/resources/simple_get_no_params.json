@@ -1,0 +1,39 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Title",
+    "description": "Title",
+    "version": "1.0.0"
+  },
+  "host": "www",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/test": {
+      "get": {
+        "summary": "simple_get_no_params",
+        "description": " ",
+        "operationId": "gettest",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "security": [
+          {
+            "defaultProvider": [
+              "openid",
+              "email",
+              "profile"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "res"
+          }
+        }
+      }
+    }
+  }
+}

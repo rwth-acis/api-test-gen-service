@@ -1,0 +1,9 @@
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/api_test_gen_service"
+    target-branch: "develop"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/Berlin"

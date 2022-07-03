@@ -3,6 +3,7 @@ package i5.las2peer.services.apiTestGenService;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,10 @@ import i5.las2peer.api.security.AgentLockedException;
 import i5.las2peer.apiTestModel.StatusCodeAssertion;
 import i5.las2peer.apiTestModel.TestCase;
 import i5.las2peer.security.AnonymousAgentImpl;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +27,7 @@ import i5.las2peer.p2p.LocalNodeManager;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test class for API test generation.
@@ -130,6 +136,26 @@ public class ServiceTest {
                         ))
                 )
         ))));
+    }
+
+    /**
+     * Test for method "openAPIToTests".
+     */
+    @Test
+    public void testOpenAPIToTests() throws IOException, ServiceInvocationException, AgentLockedException, ParseException {
+        String docs = this.readSwaggerDocFromFile("simple_get_no_params.json");
+        String result = (String) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIToTests", new Serializable[] {docs});
+        JSONArray testsArray = (JSONArray) JSONValue.parseWithException(result);
+        // at least one test case should be generated
+        assertTrue(testsArray.size() > 0);
+        // check result structure (of first item)
+        assertThat(testsArray.get(0), isA(JSONObject.class));
+        JSONObject obj = (JSONObject) testsArray.get(0);
+        assertThat((HashMap<String, Object>) obj, allOf(
+                hasKey("testCase"),
+                hasKey("description")
+                )
+        );
     }
 
     private String readSwaggerDocFromFile(String fileName) throws IOException {

@@ -94,7 +94,7 @@ public class ServiceTest {
 	 * If a schema for the request body is given, a test case violating the schema should be generated.
 	 */
     @Test
-    public void testRequestBodyWithSchema() throws IOException, ServiceInvocationException, AgentLockedException {
+    public void testRequestBodyWithSchema_400() throws IOException, ServiceInvocationException, AgentLockedException {
         String docs = this.readSwaggerDocFromFile("request_body_with_schema.json");
         Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIPathToTests", new Serializable[]{docs, "/test"});
         List<TestCase> testCases = testCasesMap.keySet().stream().toList();
@@ -108,6 +108,30 @@ public class ServiceTest {
                                         hasProperty("assertionType", is(StatusCodeAssertion.ASSERTION_TYPE_ID)),
                                         hasProperty("comparisonOperator", is(StatusCodeAssertion.COMPARISON_OPERATOR_EQUALS)),
                                         hasProperty("statusCodeValue", is(400))
+                                )
+                        ))
+                )
+        ))));
+    }
+
+    /**
+     * Test for POST request JSON body generation.
+     */
+    @Test
+    public void testRequestBodyWithSchema_201() throws IOException, ServiceInvocationException, AgentLockedException {
+        String docs = this.readSwaggerDocFromFile("request_body_with_schema.json");
+        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIPathToTests", new Serializable[]{docs, "/test"});
+        List<TestCase> testCases = testCasesMap.keySet().stream().toList();
+        assertThat(testCases, hasItem(hasProperty("requests", hasItem(
+                allOf(
+                        hasProperty("type", is("POST")),
+                        hasProperty("url", is("/test")),
+                        hasProperty("body", stringContainsInOrder("{", "name" ,"}")),
+                        hasProperty("assertions", hasItem(
+                                allOf(
+                                        hasProperty("assertionType", is(StatusCodeAssertion.ASSERTION_TYPE_ID)),
+                                        hasProperty("comparisonOperator", is(StatusCodeAssertion.COMPARISON_OPERATOR_EQUALS)),
+                                        hasProperty("statusCodeValue", is(201))
                                 )
                         ))
                 )
@@ -132,6 +156,81 @@ public class ServiceTest {
                                         hasProperty("assertionType", is(StatusCodeAssertion.ASSERTION_TYPE_ID)),
                                         hasProperty("comparisonOperator", is(StatusCodeAssertion.COMPARISON_OPERATOR_EQUALS)),
                                         hasProperty("statusCodeValue", is(404))
+                                )
+                        ))
+                )
+        ))));
+    }
+
+    /**
+     * "Unauthorized" test case should be generated if status code 403 is allowed.
+     */
+    @Test
+    public void testSimpleOperationAgentRequired_403() throws IOException, ServiceInvocationException, AgentLockedException {
+        String docs = this.readSwaggerDocFromFile("simple_operation_agent_required_403.json");
+        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIPathToTests", new Serializable[]{docs, "/test"});
+        List<TestCase> testCases = testCasesMap.keySet().stream().toList();
+        assertThat(testCases, hasItem(hasProperty("requests", hasItem(
+                allOf(
+                        hasProperty("type", is("DELETE")),
+                        hasProperty("url", is("/test")),
+                        hasProperty("agent", is(0)),
+                        hasProperty("assertions", hasItem(
+                                allOf(
+                                        hasProperty("assertionType", is(StatusCodeAssertion.ASSERTION_TYPE_ID)),
+                                        hasProperty("comparisonOperator", is(StatusCodeAssertion.COMPARISON_OPERATOR_EQUALS)),
+                                        hasProperty("statusCodeValue", is(403))
+                                )
+                        ))
+                )
+        ))));
+    }
+
+    /**
+     * "Unauthorized" test case should be generated if status code 401 is allowed.
+     */
+    @Test
+    public void testSimpleOperationAgentRequired_401() throws IOException, ServiceInvocationException, AgentLockedException {
+        String docs = this.readSwaggerDocFromFile("simple_operation_agent_required_401.json");
+        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIPathToTests", new Serializable[]{docs, "/test"});
+        List<TestCase> testCases = testCasesMap.keySet().stream().toList();
+        assertThat(testCases, hasItem(hasProperty("requests", hasItem(
+                allOf(
+                        hasProperty("type", is("DELETE")),
+                        hasProperty("url", is("/test")),
+                        hasProperty("agent", is(0)),
+                        hasProperty("assertions", hasItem(
+                                allOf(
+                                        hasProperty("assertionType", is(StatusCodeAssertion.ASSERTION_TYPE_ID)),
+                                        hasProperty("comparisonOperator", is(StatusCodeAssertion.COMPARISON_OPERATOR_EQUALS)),
+                                        hasProperty("statusCodeValue", is(401))
+                                )
+                        ))
+                )
+        ))));
+    }
+
+    /**
+     * "Unauthorized" test case should be generated if status code 401 is allowed.
+     * This test also verifies that the path parameters are initialized.
+     */
+    @Test
+    public void testOperationAgentRequired_401() throws IOException, ServiceInvocationException, AgentLockedException {
+        String docs = this.readSwaggerDocFromFile("operation_agent_required_401.json");
+        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIPathToTests", new Serializable[]{docs, "/test/{id}"});
+        List<TestCase> testCases = testCasesMap.keySet().stream().toList();
+        assertThat(testCases, hasItem(hasProperty("requests", hasItem(
+                allOf(
+                        hasProperty("type", is("GET")),
+                        hasProperty("url", is("/test/{id}")),
+                        hasProperty("pathParams", hasKey("id")),
+                        hasProperty("body", is("")),
+                        hasProperty("agent", is(0)),
+                        hasProperty("assertions", hasItem(
+                                allOf(
+                                        hasProperty("assertionType", is(StatusCodeAssertion.ASSERTION_TYPE_ID)),
+                                        hasProperty("comparisonOperator", is(StatusCodeAssertion.COMPARISON_OPERATOR_EQUALS)),
+                                        hasProperty("statusCodeValue", is(401))
                                 )
                         ))
                 )

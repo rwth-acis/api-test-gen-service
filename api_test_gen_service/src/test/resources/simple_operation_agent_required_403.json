@@ -1,0 +1,40 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Title",
+    "description": "Title",
+    "version": "1.0.0"
+  },
+  "host": "www",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/test": {
+      "delete": {
+        "summary": "simple_operation_agent_required",
+        "description": " ",
+        "operationId": "deletetest",
+        "produces": [],
+        "parameters": [],
+        "security": [
+          {
+            "defaultProvider": [
+              "openid",
+              "email",
+              "profile"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "403": {
+            "description": "unauthorized"
+          }
+        }
+      }
+    }
+  }
+}

@@ -28,7 +28,9 @@ public class TestCaseGeneration {
         TestCaseGenerator[] generators = new TestCaseGenerator[]{
                 new SimpleGETTestGenerator(),
                 new MissingBodyPropTestGenerator(),
-                new ResourceNotFoundTestGenerator() };
+                new ResourceNotFoundTestGenerator(),
+                new SimpleUnauthorizedTestGenerator(),
+                new SimplePOSTBodyTestGenerator()};
 
         // generate test cases
         for (TestCaseGenerator generator : generators) {

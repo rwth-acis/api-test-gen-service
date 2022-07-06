@@ -1,0 +1,67 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Title",
+    "description": "Title",
+    "version": "1.0.0"
+  },
+  "host": "www",
+  "schemes": [
+    "https"
+  ],
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/test/{id}": {
+      "get": {
+        "summary": "operation_agent_required",
+        "description": " ",
+        "operationId": "gettest",
+        "produces": [],
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "in": "body",
+            "description": ""
+          },
+          {
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "in": "path",
+            "description": ""
+          }
+        ],
+        "security": [
+          {
+            "defaultProvider": [
+              "openid",
+              "email",
+              "profile"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "401": {
+            "description": "unauthorized"
+          }
+        }
+      }
+    }
+  }
+}

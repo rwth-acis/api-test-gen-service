@@ -34,9 +34,9 @@ import static org.junit.Assert.assertTrue;
  */
 public class ServiceTest {
 
-    private static LocalNode node;
+    protected static LocalNode node;
 
-    private static ServiceNameVersion serviceName = new ServiceNameVersion(APITestGenService.class.getName(), "1.0.0");
+    protected static ServiceNameVersion serviceName = new ServiceNameVersion(APITestGenService.class.getName(), "1.0.0");
 
     /**
      * Called before a test starts.
@@ -70,10 +70,9 @@ public class ServiceTest {
     /**
      * For a GET method without any parameters the response status code should always be 200.
      */
-    @Test
-    public void testSimpleGetNoParams() throws ServiceInvocationException, AgentLockedException, IOException {
-        String docs = this.readSwaggerDocFromFile("simple_get_no_params.json");
-        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIPathToTests", new Serializable[]{docs, "/test"});
+    public void testSimpleGetNoParams(boolean v3) throws ServiceInvocationException, AgentLockedException, IOException {
+        String docs = this.readSwaggerDocFromFile((v3 ? "v3" : "v2") + "/simple_get_no_params.json");
+        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPI" + (v3 ? "V3" : "") + "PathToTests", new Serializable[]{docs, "/test"});
         List<TestCase> testCases = testCasesMap.keySet().stream().toList();
         assertThat(testCases, hasItem(hasProperty("requests", hasItem(
                 allOf(
@@ -90,13 +89,12 @@ public class ServiceTest {
         ))));
     }
 
-	/**
-	 * If a schema for the request body is given, a test case violating the schema should be generated.
-	 */
-    @Test
-    public void testRequestBodyWithSchema_400() throws IOException, ServiceInvocationException, AgentLockedException {
-        String docs = this.readSwaggerDocFromFile("request_body_with_schema.json");
-        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIPathToTests", new Serializable[]{docs, "/test"});
+    /**
+     * If a schema for the request body is given, a test case violating the schema should be generated.
+     */
+    public void testRequestBodyWithSchema_400(boolean v3) throws IOException, ServiceInvocationException, AgentLockedException {
+        String docs = this.readSwaggerDocFromFile((v3 ? "v3" : "v2") + "/request_body_with_schema.json");
+        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPI" + (v3 ? "V3" : "") + "PathToTests", new Serializable[]{docs, "/test"});
         List<TestCase> testCases = testCasesMap.keySet().stream().toList();
         assertThat(testCases, hasItem(hasProperty("requests", hasItem(
                 allOf(
@@ -117,10 +115,9 @@ public class ServiceTest {
     /**
      * Test for POST request JSON body generation.
      */
-    @Test
-    public void testRequestBodyWithSchema_201() throws IOException, ServiceInvocationException, AgentLockedException {
-        String docs = this.readSwaggerDocFromFile("request_body_with_schema.json");
-        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIPathToTests", new Serializable[]{docs, "/test"});
+    public void testRequestBodyWithSchema_201(boolean v3) throws IOException, ServiceInvocationException, AgentLockedException {
+        String docs = this.readSwaggerDocFromFile((v3 ? "v3" : "v2") + "/request_body_with_schema.json");
+        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPI" + (v3 ? "V3" : "") + "PathToTests", new Serializable[]{docs, "/test"});
         List<TestCase> testCases = testCasesMap.keySet().stream().toList();
         assertThat(testCases, hasItem(hasProperty("requests", hasItem(
                 allOf(
@@ -138,13 +135,12 @@ public class ServiceTest {
         ))));
     }
 
-	/**
-	 * "Resource not found" test case should be generated if path parameters are available.
-	 */
-    @Test
-    public void testPathParamResourceNotFound() throws IOException, ServiceInvocationException, AgentLockedException {
-        String docs = this.readSwaggerDocFromFile("path_param_resource_not_found.json");
-        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIPathToTests", new Serializable[]{docs, "/dishes/{id}/ratings"});
+    /**
+     * "Resource not found" test case should be generated if path parameters are available.
+     */
+    public void testPathParamResourceNotFound(boolean v3) throws IOException, ServiceInvocationException, AgentLockedException {
+        String docs = this.readSwaggerDocFromFile((v3 ? "v3" : "v2") + "/path_param_resource_not_found.json");
+        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPI"  + (v3 ? "V3" : "") + "PathToTests", new Serializable[]{docs, "/dishes/{id}/ratings"});
         List<TestCase> testCases = testCasesMap.keySet().stream().toList();
         assertThat(testCases, hasItem(hasProperty("requests", hasItem(
                 allOf(
@@ -165,10 +161,9 @@ public class ServiceTest {
     /**
      * "Unauthorized" test case should be generated if status code 403 is allowed.
      */
-    @Test
-    public void testSimpleOperationAgentRequired_403() throws IOException, ServiceInvocationException, AgentLockedException {
-        String docs = this.readSwaggerDocFromFile("simple_operation_agent_required_403.json");
-        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIPathToTests", new Serializable[]{docs, "/test"});
+    public void testSimpleOperationAgentRequired_403(boolean v3) throws IOException, ServiceInvocationException, AgentLockedException {
+        String docs = this.readSwaggerDocFromFile((v3 ? "v3" : "v2") + "/simple_operation_agent_required_403.json");
+        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPI" + (v3 ? "V3" : "") + "PathToTests", new Serializable[]{docs, "/test"});
         List<TestCase> testCases = testCasesMap.keySet().stream().toList();
         assertThat(testCases, hasItem(hasProperty("requests", hasItem(
                 allOf(
@@ -189,10 +184,9 @@ public class ServiceTest {
     /**
      * "Unauthorized" test case should be generated if status code 401 is allowed.
      */
-    @Test
-    public void testSimpleOperationAgentRequired_401() throws IOException, ServiceInvocationException, AgentLockedException {
-        String docs = this.readSwaggerDocFromFile("simple_operation_agent_required_401.json");
-        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIPathToTests", new Serializable[]{docs, "/test"});
+    public void testSimpleOperationAgentRequired_401(boolean v3) throws IOException, ServiceInvocationException, AgentLockedException {
+        String docs = this.readSwaggerDocFromFile((v3 ? "v3" : "v2") + "/simple_operation_agent_required_401.json");
+        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPI" + (v3 ? "V3" : "") + "PathToTests", new Serializable[]{docs, "/test"});
         List<TestCase> testCases = testCasesMap.keySet().stream().toList();
         assertThat(testCases, hasItem(hasProperty("requests", hasItem(
                 allOf(
@@ -214,10 +208,9 @@ public class ServiceTest {
      * "Unauthorized" test case should be generated if status code 401 is allowed.
      * This test also verifies that the path parameters are initialized.
      */
-    @Test
-    public void testOperationAgentRequired_401() throws IOException, ServiceInvocationException, AgentLockedException {
-        String docs = this.readSwaggerDocFromFile("operation_agent_required_401.json");
-        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIPathToTests", new Serializable[]{docs, "/test/{id}"});
+    public void testOperationAgentRequired_401(boolean v3) throws IOException, ServiceInvocationException, AgentLockedException {
+        String docs = this.readSwaggerDocFromFile((v3 ? "v3" : "v2") + "/operation_agent_required_401.json");
+        Map<TestCase, String> testCasesMap = (Map<TestCase, String>) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPI" + (v3 ? "V3" : "") + "PathToTests", new Serializable[]{docs, "/test/{id}"});
         List<TestCase> testCases = testCasesMap.keySet().stream().toList();
         assertThat(testCases, hasItem(hasProperty("requests", hasItem(
                 allOf(
@@ -240,10 +233,9 @@ public class ServiceTest {
     /**
      * Test for method "openAPIToTests".
      */
-    @Test
-    public void testOpenAPIToTests() throws IOException, ServiceInvocationException, AgentLockedException, ParseException {
-        String docs = this.readSwaggerDocFromFile("simple_get_no_params.json");
-        String result = (String) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIToTests", new Serializable[] {docs});
+    public void testOpenAPIToTests(boolean v3) throws IOException, ServiceInvocationException, AgentLockedException, ParseException {
+        String docs = this.readSwaggerDocFromFile((v3 ? "v3" : "v2") + "/simple_get_no_params.json");
+        String result = (String) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPI" + (v3 ? "V3" : "") + "ToTests", new Serializable[] {docs});
         JSONArray testsArray = (JSONArray) JSONValue.parseWithException(result);
         // at least one test case should be generated
         assertTrue(testsArray.size() > 0);
@@ -251,13 +243,13 @@ public class ServiceTest {
         assertThat(testsArray.get(0), isA(JSONObject.class));
         JSONObject obj = (JSONObject) testsArray.get(0);
         assertThat((HashMap<String, Object>) obj, allOf(
-                hasKey("testCase"),
-                hasKey("description")
+                        hasKey("testCase"),
+                        hasKey("description")
                 )
         );
     }
 
-    private String readSwaggerDocFromFile(String fileName) throws IOException {
+    protected String readSwaggerDocFromFile(String fileName) throws IOException {
         URL url = Resources.getResource(fileName);
         return Resources.toString(url, StandardCharsets.UTF_8);
     }

@@ -8,8 +8,10 @@ import io.swagger.models.Operation;
 import io.swagger.models.Swagger;
 import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
+import io.swagger.v3.oas.models.media.Schema;
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,21 @@ public class GenerationHelper {
      * @param operation Operation from Swagger documentation.
      */
     public static void setEmptyPathParameters(TestRequest request, Operation operation) {
+        JSONObject pathParams = request.getPathParams();
+        operation.getParameters().stream().forEach(parameter -> {
+            if (parameter.getIn().equals("path")) {
+                pathParams.put(parameter.getName(), "");
+            }
+        });
+    }
+
+    /**
+     * If the operation contains path parameters, sets them to "" in the test request.
+     *
+     * @param request   TestRequest
+     * @param operation Operation from Swagger documentation.
+     */
+    public static void setEmptyPathParameters(TestRequest request, io.swagger.v3.oas.models.Operation operation) {
         JSONObject pathParams = request.getPathParams();
         operation.getParameters().stream().forEach(parameter -> {
             if (parameter.getIn().equals("path")) {
@@ -101,7 +118,17 @@ public class GenerationHelper {
         return ref.split("#/definitions/")[1];
     }
 
+    public static String getBodyParameterSchemaName(Schema schema) {
+        String ref = schema.get$ref();
+        return ref.split("#/components/schemas/")[1];
+    }
+
     public static List<Parameter> getOperationPathParams(Operation operation) {
+        return operation.getParameters().stream().filter(param -> param.getIn().equals("path")).toList();
+    }
+
+    public static List<io.swagger.v3.oas.models.parameters.Parameter> getOperationPathParams(io.swagger.v3.oas.models.Operation operation) {
+        if(operation.getParameters() == null) return new ArrayList<>();
         return operation.getParameters().stream().filter(param -> param.getIn().equals("path")).toList();
     }
 
@@ -109,7 +136,16 @@ public class GenerationHelper {
         return operation.getParameters().size() == 0;
     }
 
+    public static boolean hasNoParameters(io.swagger.v3.oas.models.Operation operation) {
+        if(operation.getParameters() == null) return true;
+        return operation.getParameters().size() == 0;
+    }
+
     public static boolean statusCodeAllowed(Operation operation, int statusCode) {
+        return operation.getResponses().keySet().contains(String.valueOf(statusCode));
+    }
+
+    public static boolean statusCodeAllowed(io.swagger.v3.oas.models.Operation operation, int statusCode) {
         return operation.getResponses().keySet().contains(String.valueOf(statusCode));
     }
 }

@@ -27,7 +27,7 @@ dependencies {
     implementation "io.swagger.core.v3:swagger-models:2.2.2"
     implementation "io.swagger.parser.v3:swagger-parser-v3:2.1.1"
     implementation "io.swagger:swagger-parser:1.0.61"
-    implementation "i5:las2peer-api-test-model:0.1.6"
+    implementation "i5:las2peer-api-test-model:0.1.7"
 
     implementation "com.googlecode.json-simple:json-simple:1.1.1"
 }

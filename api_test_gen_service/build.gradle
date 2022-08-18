@@ -30,6 +30,8 @@ dependencies {
     implementation "i5:las2peer-api-test-model:0.1.9"
 
     implementation "com.googlecode.json-simple:json-simple:1.1.1"
+
+    implementation "org.openapitools.openapidiff:openapi-diff-core:2.1.0-beta.3"
 }
 
 configurations {

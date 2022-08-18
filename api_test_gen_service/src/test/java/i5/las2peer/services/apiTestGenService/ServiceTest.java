@@ -27,7 +27,7 @@ import i5.las2peer.p2p.LocalNodeManager;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Test class for API test generation.
@@ -247,6 +247,28 @@ public class ServiceTest {
                         hasKey("description")
                 )
         );
+    }
+
+    /**
+     * Test for method "openAPIDiffToTest" with an added endpoint.
+     */
+    public void testAddedEndpoint(boolean v3) throws ServiceInvocationException, AgentLockedException, IOException {
+        String docEmpty = this.readSwaggerDocFromFile((v3 ? "v3" : "v2") + "/empty.json");
+        String doc = this.readSwaggerDocFromFile((v3 ? "v3" : "v2") + "/simple_get_no_params.json");
+        String result = (String) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIDiffToTest", new Serializable[]{docEmpty, doc});
+        JSONObject resultJSON = (JSONObject) JSONValue.parse(result);
+        assertTrue(resultJSON.containsKey("testCase"));
+    }
+
+    /**
+     * Test for method "openAPIDiffToTest" with no OpenAPI doc differences.
+     */
+    public void testUnchanged(boolean v3) throws IOException, ServiceInvocationException, AgentLockedException {
+        String doc = this.readSwaggerDocFromFile((v3 ? "v3" : "v2") + "/simple_get_no_params.json");
+        String result = (String) node.invoke(AnonymousAgentImpl.getInstance(), serviceName, "openAPIDiffToTest", new Serializable[]{doc, doc});
+        JSONObject resultJSON = (JSONObject) JSONValue.parse(result);
+        // if the OpenAPI doc is unchanged, no test case should be generated
+        assertFalse(resultJSON.containsKey("testCase"));
     }
 
     protected String readSwaggerDocFromFile(String fileName) throws IOException {

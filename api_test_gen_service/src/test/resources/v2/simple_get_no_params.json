@@ -35,5 +35,17 @@
         }
       }
     }
+  },
+  "securityDefinitions": {
+    "defaultProvider": {
+      "type": "oauth2",
+      "authorizationUrl": "https://auth.las2peer.org/auth/realms/main/protocol/openid-connect/auth",
+      "flow": "implicit",
+      "scopes": {
+        "openid": "Access Identity",
+        "email": "Access E-Mail-Address",
+        "profile": "Access Profile Data"
+      }
+    }
   }
 }

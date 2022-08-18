@@ -89,4 +89,20 @@ public class ServiceTestV2 extends ServiceTest {
         super.testOpenAPIToTests(false);
     }
 
+    /**
+     * Test for method "openAPIDiffToTest" with an added endpoint.
+     */
+    @Test
+    public void testAddedEndpoint() throws IOException, ServiceInvocationException, AgentLockedException {
+        super.testAddedEndpoint(false);
+    }
+
+    /**
+     * Test for method "openAPIDiffToTest" with no OpenAPI doc differences.
+     */
+    @Test
+    public void testUnchanged() throws IOException, ServiceInvocationException, AgentLockedException {
+        super.testUnchanged(false);
+    }
+
 }

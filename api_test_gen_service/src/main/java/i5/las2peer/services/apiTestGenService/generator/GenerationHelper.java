@@ -41,6 +41,7 @@ public class GenerationHelper {
      */
     public static void setEmptyPathParameters(TestRequest request, io.swagger.v3.oas.models.Operation operation) {
         JSONObject pathParams = request.getPathParams();
+        if(operation.getParameters() == null) return;
         operation.getParameters().stream().forEach(parameter -> {
             if (parameter.getIn().equals("path")) {
                 pathParams.put(parameter.getName(), "");

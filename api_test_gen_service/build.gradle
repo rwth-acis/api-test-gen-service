@@ -24,12 +24,14 @@ dependencies {
     // compileOnly will be moved into the lib dir afterwards
     compileOnly "i5:las2peer-bundle:${project.property('core.version')}"
 
-    implementation "io.swagger.core.v3:swagger-models:2.2.1"
-    implementation "io.swagger.parser.v3:swagger-parser-v3:2.1.1"
+    implementation "io.swagger.core.v3:swagger-models:2.2.2"
+    implementation "io.swagger.parser.v3:swagger-parser-v3:2.1.2"
     implementation "io.swagger:swagger-parser:1.0.61"
-    implementation "i5:las2peer-api-test-model:0.1.5"
+    implementation "i5:las2peer-api-test-model:1.0.0"
 
     implementation "com.googlecode.json-simple:json-simple:1.1.1"
+
+    implementation "org.openapitools.openapidiff:openapi-diff-core:2.1.0-beta.3"
 }
 
 configurations {

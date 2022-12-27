@@ -43,7 +43,7 @@ public class MissingBodyPropTestGenerator implements TestCaseGenerator {
                 if (model.getProperties().keySet().size() > 0) {
                     // definition contains at least one property
                     // create test that sends empty JSONObject as body
-                    return buildTestCase(method.name(), path, schemaName);
+                    return buildTestCase(false, operation, method.name(), path, schemaName);
                 }
             }
         }
@@ -78,7 +78,7 @@ public class MissingBodyPropTestGenerator implements TestCaseGenerator {
                         if(component.getProperties().keySet().size() > 0) {
                             // definition contains at least one property
                             // create test that sends empty JSONObject as body
-                            return buildTestCase(method.name(), path, schemaName);
+                            return buildTestCase(true, operation, method.name(), path, schemaName);
                         }
                     }
                 }
@@ -87,9 +87,14 @@ public class MissingBodyPropTestGenerator implements TestCaseGenerator {
         return null;
     }
 
-    private Map.Entry<TestCase, String> buildTestCase(String methodName, String path, String schemaName) {
+    private Map.Entry<TestCase, String> buildTestCase(boolean v3, Object operation, String methodName, String path, String schemaName) {
         StatusCodeAssertion assertion = new StatusCodeAssertion(0, 400);
         TestRequest request = createTestRequest(methodName, path, "{}", assertion);
+        if(v3) {
+            setEmptyPathParameters(request, (io.swagger.v3.oas.models.Operation) operation);
+        } else {
+            setEmptyPathParameters(request, (Operation) operation);
+        }
         TestCase generatedTestCase = createTestCase(methodName + " " + path
                 + " bad request (missing body property)", request);
 

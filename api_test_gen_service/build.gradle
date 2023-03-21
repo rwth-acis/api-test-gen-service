@@ -24,7 +24,7 @@ dependencies {
     // compileOnly will be moved into the lib dir afterwards
     compileOnly "i5:las2peer-bundle:${project.property('core.version')}"
 
-    implementation "io.swagger.core.v3:swagger-models:2.2.4"
+    implementation "io.swagger.core.v3:swagger-models:2.2.9"
     implementation "io.swagger.parser.v3:swagger-parser-v3:2.1.11"
     implementation "io.swagger:swagger-parser:1.0.63"
     implementation "i5:las2peer-api-test-model:1.0.0"
